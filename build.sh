@@ -1,0 +1,1 @@
+g++ -o build/compiler code/main.cc code/lexer.cc code/parser.cc code/singleFunctions/printError.cc code/singleFunctions/printToken.cc -std=c++20 -Wall -Wextra -Werror -Wpedantic -pedantic -pedantic-errors
