@@ -1,1 +1,2 @@
-g++ -o build/$2 $1 -std=c++20 -Wall -Wextra -Werror -Wpedantic -pedantic -pedantic-errors
+path=$1
+g++ -o build/${path%.*} $1 -std=c++20 -Wall -Wextra -Werror -Wpedantic -pedantic -pedantic-errors

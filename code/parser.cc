@@ -1,19 +1,25 @@
 #include "parser.h"
+#include "header.h"
 
 std::vector<Instruction> parser(std::vector<Token> *_VecToken) {
   std::vector<Instruction> _Ret{};
   Instruction _Instruc{};
-  Statement _Statement{};
 
   for (Token &_Tk : *_VecToken) {
     switch (_Tk._TValue) {
-      case SEPARATOR:
+      case SEMICOLON:
+          _Instruc._VecList.push_back(SEMICOLON);
+          if (_InstrucMap.contains(_Instruc._VecList)) {
+            _Instruc._Type = _InstrucMap[_Instruc._VecList];
+            _Ret.push_back(_Instruc);
+            _Instruc.clear();
+          }
         break;
       default:
-        _Statement._Instruc.push_back(_Tk._TValue);
+        _Instruc._VecList.push_back(_Tk._TValue);
         switch (_Tk._Type) {
           case LITERAL:
-            _Statement._Value.push_back(_Tk._Value);
+            _Instruc._Value.push_back(_Tk._Value);
             break;
           default: break;
         }

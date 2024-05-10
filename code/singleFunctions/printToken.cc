@@ -30,6 +30,9 @@ void printToken(std::vector<Token> *_VecToken) {
       case VARIABLE:
         std::cout << "VARIABLE : " << _Val._Value << "\n";
         break;
+      case SCANF:
+        std::cout << "SCANF\n";
+        break;
     }
   }
 }
