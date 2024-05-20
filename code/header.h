@@ -1,10 +1,11 @@
 #ifndef _HEADER_
 #define _HEADER_
 
-#include <iostream>
 #include <vector>
 #include <fstream>
 #include <map>
+
+#include "stringFunction.h"
 
 typedef enum {
   INT,
@@ -53,6 +54,14 @@ typedef struct Instruction {
   std::vector<std::string> _Value;
 } Instruction;
 
+typedef struct DataSection {
+  DataSection(std::string t_value, TokenValue t_type) 
+    : _Value(t_value), _Type(t_type) {}
+  std::string _Value;
+  TokenValue _Type;
+} DataSection;
+
 extern std::map<std::vector<TokenValue>, InstrucType> _InstrucMap;
+extern std::vector<InstrucType> generateFunction;
 
 #endif 

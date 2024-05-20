@@ -13,8 +13,11 @@ std::map<std::vector<TokenValue>, InstrucType> _InstrucMap {
   { __SCANF__, __scanf__ },
 };
 
+std::vector<InstrucType> generateFunction{}; 
+
 void Instruction::clear() {
   this->_Type = __EMPTY__;
   this->_Value.clear();
   this->_VecList.clear();
 }
+

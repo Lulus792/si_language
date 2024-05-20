@@ -1,6 +1,6 @@
 #include "lexer.h"
 #include "parser.h"
-#include "singleFunctions/singleFunctions.h"
+#include "generateCode.h"
 
 int main(int argc, char **argv) {
 
@@ -8,9 +8,11 @@ int main(int argc, char **argv) {
     printError("Wrong syntax. Correct syntax: compiler <file.si>");
   }
 
+
   std::ifstream file(argv[1]);
   std::vector<Token> _Code = lexer(&file);
   std::vector<Instruction> _Instructions = parser(&_Code);
+  generateCode(&_Instructions, argv[1]);
 
   file.close();
 

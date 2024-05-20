@@ -1,5 +1,6 @@
 #include "lexer.h"
 #include "singleFunctions/singleFunctions.h"
+#include <type_traits>
 
 Token getNumber(std::string *_Line, size_t *_Index) {
   Token _Ret(LITERAL);
@@ -11,8 +12,8 @@ Token getNumber(std::string *_Line, size_t *_Index) {
   while (*_Index < _Line->size() && (isdigit((*_Line)[*_Index]) || 
   (*_Line)[*_Index] == '.'));
 
-  size_t countDots = _Number.rfind('.');
-  if (countDots == std::string::npos) {
+  size_t countDots = si::find(&_Number, '.');
+  if (countDots == 0) {
     _Ret._TValue = INT;
   }
   else if (countDots == 1) {
@@ -77,8 +78,27 @@ Token getString(std::string *_Line, size_t *_Index) {
   std::string _String{};
   
   while (*_Index < _Line->size() && (*_Line)[*_Index] != '\"') {
-    _String += (*_Line)[*_Index];
-    (*_Index)++;
+    if ((*_Line)[*_Index] == '\\') {
+      (*_Index)++;
+      switch ((*_Line)[*_Index]) {
+        case 'n':
+          _String += '\n';
+          (*_Index)++;
+          break;
+        case 't':
+          _String += '\t';
+          (*_Index)++;
+          break;
+        case '0':
+          _String += '\0';
+          (*_Index)++;
+          break;
+      }
+    }
+    else {
+      _String += (*_Line)[*_Index];
+      (*_Index)++;
+    }
   }
   if (*_Index == _Line->size()) {
     printError("Missing Quotation mark.");
