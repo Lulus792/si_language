@@ -1,5 +1,1 @@
-printf("Hello World\nHello World\n");
-printf("Some Lines : ");
-printf("This is insane\n");
-printf("New Text\n");
 exit(0);

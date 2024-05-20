@@ -66,6 +66,7 @@ std::vector<std::string> seperateString(std::string _Value) {
   std::string tmp{};
   for (char &c : _Value) {
     if (c == '\n') {
+      tmp += c;
       ret.push_back(tmp);
       tmp = "";
     }
@@ -90,7 +91,7 @@ void generatePrintfCall(std::string _PrintValue, std::ofstream *file,
       *file << "\tmov rsi, str" << *_Pos << "\n";
       //*file << "\tadd rsi, 0xA\n";
       *file << "\tmov rdx, "; 
-      *file << str.substr(0, str.find_last_of('\n')).length() << "\n"; 
+      *file << str.length() << "\n"; 
       *file << "\tcall _printf\n";   
       (*_Pos)++;
     }
@@ -114,12 +115,19 @@ void generateDataSection(std::ofstream *file,
 
   unsigned int count{};
   for (DataSection value : *data) {
-    *file << "\tstr" << count << ": db \"" << value._Value << "\"\n";    
+    if (si::find(&value._Value, '\n')) {
+      *file << "\tstr" << count << ": db \""; 
+      *file << value._Value.substr(0, (value._Value.length() - 1)) << "\", 0xA\n"; 
+    }
+    else {
+      *file << "\tstr" << count << ": db \"" << value._Value << "\"\n"; 
+    }
     count++;
   } 
 }
 
-void generateCode(std::vector<Instruction> *_Instruc, char *filename) {
+void generateCode(std::vector<Instruction> *_Instruc, char *filename,
+                  std::string _Flags) {
   std::string fileName = generateFileName(filename);
   std::vector<DataSection> variableDeclaration{};
   unsigned int pos{};
@@ -165,7 +173,9 @@ void generateCode(std::vector<Instruction> *_Instruc, char *filename) {
 
   system(compileFile.c_str());
   system(linkFile.c_str());
-  //system(removeDotAsmFile.c_str());
   system(removeDotOFile.c_str());
 
+  if (_Flags != "-s") {
+    system(removeDotAsmFile.c_str());
+  }
 }
