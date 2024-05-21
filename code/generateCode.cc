@@ -128,6 +128,7 @@ void generateDataSection(std::ofstream *file,
 
 void generateCode(std::vector<Instruction> *_Instruc, char *filename,
                   std::string _Flags) {
+
   std::string fileName = generateFileName(filename);
   std::vector<DataSection> variableDeclaration{};
   unsigned int pos{};

@@ -1,6 +1,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "generateCode.h"
+#include "singleFunctions/singleFunctions.h"
 
 int main(int argc, char **argv) {
 

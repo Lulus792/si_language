@@ -18,6 +18,7 @@ typedef enum {
   OPEN_PAREN,
   CLOSE_PAREN,
   SEMICOLON,
+  EQUAL,
 } TokenValue;
 
 typedef enum {
@@ -62,6 +63,7 @@ typedef struct DataSection {
 } DataSection;
 
 extern std::map<std::vector<TokenValue>, InstrucType> _InstrucMap;
+extern std::map<std::string, TokenValue> _CommandMap;
 extern std::vector<InstrucType> generateFunction;
 
 #endif 

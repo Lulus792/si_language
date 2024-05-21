@@ -16,11 +16,10 @@ std::vector<Instruction> parser(std::vector<Token> *_VecToken) {
                                     generateFunction.end(),
                                     _InstrucMap[_Instruc._VecList])) {
               generateFunction.push_back(_InstrucMap[_Instruc._VecList]);
-          }
-            
+            }
             _Ret.push_back(_Instruc);
-            _Instruc.clear();
           }
+          _Instruc.clear();
         break;
       default:
         _Instruc._VecList.push_back(_Tk._TValue);

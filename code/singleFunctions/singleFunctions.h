@@ -6,5 +6,6 @@
 
 void printError(std::string_view _Error, int _ErrorCode = 1);
 void printToken(std::vector<Token> *_VecToken);
+void printInstruction(std::vector<Instruction> *_Instruc);
 
 #endif

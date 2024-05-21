@@ -1,6 +1,6 @@
 #include "lexer.h"
+#include "header.h"
 #include "singleFunctions/singleFunctions.h"
-#include <type_traits>
 
 Token getNumber(std::string *_Line, size_t *_Index) {
   Token _Ret(LITERAL);
@@ -37,12 +37,9 @@ Token getCommand(std::string *_Line, size_t *_Index) {
   }
   while (*_Index < _Line->size() && isalpha((*_Line)[*_Index]));
   
-  if (_Command == "exit") {
-    _Ret._TValue = EXIT;
-  }
-  else if (_Command == "printf") {
-    _Ret._TValue = PRINTF;
-  }
+  if (_CommandMap.contains(_Command)) {
+    _Ret._TValue = _CommandMap[_Command];
+  }  
   else {
     _Ret._TValue = VARIABLE;
     _Ret._Value = _Command;
@@ -63,6 +60,9 @@ Token getSeparator(std::string *_Line, size_t *_Index) {
       break;
     case ';':
       _Ret._TValue = SEMICOLON;
+      break;
+    case '=':
+      _Ret._TValue = EQUAL;
       break;
     default:
       printError("Not a Separator.");
@@ -114,7 +114,10 @@ std::vector<Token> lexer(std::istream *_File) {
 
   while (getline(*_File, _Line)) {
     for (size_t i{}; i < _Line.size(); i++) {
-      if (isdigit(_Line[i])) {
+      if (_Line[i] == ' ') {
+        continue;
+      }
+      else if (isdigit(_Line[i])) {
         _Ret.push_back(getNumber(&_Line, &i));
         i--;
       }
@@ -126,7 +129,7 @@ std::vector<Token> lexer(std::istream *_File) {
         _Ret.push_back(getString(&_Line, &i));
       }
       else {
-          _Ret.push_back(getSeparator(&_Line, &i));
+        _Ret.push_back(getSeparator(&_Line, &i));
       }
     }
   }  

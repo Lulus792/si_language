@@ -33,6 +33,9 @@ void printToken(std::vector<Token> *_VecToken) {
       case SCANF:
         std::cout << "SCANF\n";
         break;
+      case EQUAL:
+        std::cout << "EQUAL\n";
+        break;
     }
   }
 }
