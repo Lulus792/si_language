@@ -83,6 +83,17 @@ void generatePrintfCall(std::string _PrintValue, std::ofstream *file,
   if (si::find(&_PrintValue, '\n') != 0) {
         
     // make a loop (ones i leaned how to)
+    if (_Type == VARIABLE) {
+      if (!stack.name.contains(_PrintValue)) {
+        printError("Variable not declared.");
+      }
+
+      for (size_t i{}; 
+          i < (stack.currentStack - stack.name[_PrintValue]); i++) {
+
+          *file << "pop rdx\n";      
+      }
+    }
     std::vector<std::string> strSep{ seperateString(_PrintValue) };
     for (std::string &str : strSep) {
       DataSection tmp(str, _Type);
@@ -105,6 +116,46 @@ void generatePrintfCall(std::string _PrintValue, std::ofstream *file,
     *file << "\tmov rdx, " << _PrintValue.length() << "\n";
     *file << "\tcall _printf\n";
     (*_Pos)++;
+  }
+}
+
+void declareVariable(std::ofstream *file, std::string _Value,
+    TokenValue assignedType, TokenValue definedType,
+    std::string varName) {
+
+  if (assignedType != definedType) {
+    printError("No conversion found");
+  }
+
+  *file << "\n";
+  switch(definedType) {
+    case INT:
+      *file << "\tmov r8, " << std::stoi(_Value) << "\n";
+      *file << "\tpush r8\n";
+      if (stack.name.contains(varName)) {
+        printError("Variable already declared.");
+      }
+      stack.name.insert({ varName, (stack.currentStack + 1)}); 
+      break;
+    case FLOAT:
+      *file << "\tmov r8, " << std::stod(_Value) << "\n";
+      *file << "\tpush r8\n";
+      if (stack.name.contains(varName)) {
+        printError("Variable already declared.");
+      }
+      stack.name.insert({ varName, (stack.currentStack + 1)});
+      break;
+    case STRING:
+      *file << "\tmov r8, \"" << _Value << "\"\n";
+      *file << "\tpush r8\n";
+      if (stack.name.contains(varName)) {
+        printError("Variable already declared.");
+      }
+      stack.name.insert({ varName, (stack.currentStack + 1)});
+      break;
+    default:
+      printError("Not a Type");
+      break;
   }
 }
 
@@ -141,6 +192,9 @@ void generateCode(std::vector<Instruction> *_Instruc, char *filename,
       case __function__:
       break;
       case __variable__:
+        declareVariable(&file, value._Value[1], 
+            value._VecList[3], value._VecList[0],
+            value._Value[0]);
       break;
       case __exit__:
         generateExitCode(value._Value[0], &file);

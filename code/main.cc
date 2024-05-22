@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
 
   std::ifstream file(argv[1]);
   std::vector<Token> _Code = lexer(&file);
+  printToken(&_Code);
   std::vector<Instruction> _Instructions = parser(&_Code);
 
   std::string flags{};

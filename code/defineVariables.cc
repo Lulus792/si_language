@@ -33,3 +33,5 @@ void Instruction::clear() {
   this->_VecList.clear();
 }
 
+StackManagement stack{};
+

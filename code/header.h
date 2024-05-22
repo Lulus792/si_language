@@ -62,8 +62,15 @@ typedef struct DataSection {
   TokenValue _Type;
 } DataSection;
 
+typedef struct {
+  std::map<std::string, int> name;
+  std::vector<TokenValue> Type;
+  int currentStack;
+} StackManagement;
+
 extern std::map<std::vector<TokenValue>, InstrucType> _InstrucMap;
 extern std::map<std::string, TokenValue> _CommandMap;
 extern std::vector<InstrucType> generateFunction;
+extern StackManagement stack;
 
 #endif 

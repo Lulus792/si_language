@@ -1,6 +1,5 @@
 #include "parser.h"
 #include "header.h"
-#include <algorithm>
 
 std::vector<Instruction> parser(std::vector<Token> *_VecToken) {
   std::vector<Instruction> _Ret{};
@@ -27,6 +26,10 @@ std::vector<Instruction> parser(std::vector<Token> *_VecToken) {
           case LITERAL:
             _Instruc._Value.push_back(_Tk._Value);
             break;
+          case KEYWORD:
+            if (_Tk._TValue == VARIABLE) {
+              _Instruc._Value.push_back(_Tk._Value);
+            }
           default: break;
         }
         break;
